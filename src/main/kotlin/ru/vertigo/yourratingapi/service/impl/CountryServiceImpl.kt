@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import ru.vertigo.yourratingapi.dto.CountryDto
 import ru.vertigo.yourratingapi.entity.CountryEntity
+import ru.vertigo.yourratingapi.exception.CountryNotFoundException
 import ru.vertigo.yourratingapi.repository.CountryRepository
 import ru.vertigo.yourratingapi.service.CountryService
 
@@ -15,7 +16,7 @@ class CountryServiceImpl(
     override fun getAll(): List<CountryDto> = countryRepository.findByOrderByRuName().map { it.toDto() }
 
     override fun getById(id: Int): CountryDto = countryRepository.findByIdOrNull(id = id)
-            ?.toDto() ?: throw RuntimeException("Country not found")
+            ?.toDto() ?: throw CountryNotFoundException(id)
 
     override fun search(prefix: String): List<CountryDto> =
             countryRepository.findByRuNameStartsWithIgnoreCaseOrderByRuName(prefix = prefix)
@@ -25,7 +26,7 @@ class CountryServiceImpl(
 
     @Transactional
     override fun update(id: Int, dto: CountryDto) {
-        var existingCountry = countryRepository.findByIdOrNull(id = id) ?: throw RuntimeException("Country not found")
+        var existingCountry = countryRepository.findByIdOrNull(id = id) ?: throw CountryNotFoundException(id)
 
         existingCountry.apply {
             name = dto.name
@@ -38,7 +39,7 @@ class CountryServiceImpl(
 
     @Transactional
     override fun delete(id: Int) {
-        val existingCountry = countryRepository.findByIdOrNull(id = id) ?: throw RuntimeException("Country not found")
+        val existingCountry = countryRepository.findByIdOrNull(id = id) ?: throw CountryNotFoundException(id)
         countryRepository.deleteById(existingCountry.id)
     }
 
