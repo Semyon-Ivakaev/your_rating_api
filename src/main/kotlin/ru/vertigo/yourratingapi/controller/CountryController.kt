@@ -39,6 +39,5 @@ class CountryController (
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Int) {
         countryService.delete(id = id)
-        println("Test")
     }
 }
