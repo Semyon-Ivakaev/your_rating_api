@@ -15,4 +15,6 @@ class CountryEntity(
         @Column(name = "short_name")
         var shortName: String,
         var priority: Int,
+        @OneToMany(fetch = FetchType.EAGER, mappedBy = "country")
+        var cities: List<CityEntity> = emptyList(),
 )

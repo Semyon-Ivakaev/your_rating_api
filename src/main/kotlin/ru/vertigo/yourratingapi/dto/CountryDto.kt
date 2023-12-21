@@ -6,4 +6,5 @@ data class CountryDto (
         var ruName: String,
         var shortName: String,
         val priority: Int,
+        val cities: List<CityDto>,
 )
